@@ -49,6 +49,7 @@ import mod.imphack.module.modules.render.HoleEsp;
 import mod.imphack.module.modules.render.LSD;
 import mod.imphack.module.modules.render.LowOffHand;
 import mod.imphack.module.modules.render.Nametags;
+import mod.imphack.module.modules.render.Popchams;
 import mod.imphack.module.modules.render.Search;
 import mod.imphack.module.modules.render.ViewModel;
 import mod.imphack.module.modules.utilities.AutoFish;
