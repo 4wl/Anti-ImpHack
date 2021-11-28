@@ -5,11 +5,13 @@ import me.zero.alpine.listener.Listenable;
 import me.zero.alpine.listener.Listener;
 import mod.imphack.Client;
 import mod.imphack.Main;
+import mod.imphack.command.Command;
 import mod.imphack.event.events.ImpHackEventGameOverlay;
 import mod.imphack.event.events.ImpHackEventPacket;
 import mod.imphack.module.Module;
 import mod.imphack.module.modules.utilities.Reconnect;
 import mod.imphack.ui.clickgui.ClickGuiController;
+import mod.imphack.util.Wrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiDisconnected;
@@ -19,10 +21,13 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 public class ImpHackEventManager implements Listenable {
 	private final Minecraft mc = Minecraft.getMinecraft();
@@ -87,7 +92,7 @@ public class ImpHackEventManager implements Listenable {
 					for (Module m : Main.moduleManager.modules) {
 						if (m.toggled)
 							m.onKeyPress();
-						if (m.getKey() == keyCode && keyCode > 0) {
+						if (m.getBind() == keyCode && keyCode > 0) {
 							m.toggle();
 							return;
 						}
@@ -108,7 +113,7 @@ public class ImpHackEventManager implements Listenable {
 			for (int i = 0; i < Keyboard.getKeyCount(); i++) {
 				if (Keyboard.isKeyDown(i)) {
 					Client.getNextKeyPressForKeybinding = false;
-					Client.keybindModule.setKey(i);
+					Client.keybindModule.setBind(i);
 					Client.keybindModule = null;
 					ClickGuiController.INSTANCE.settingController.refresh(false);
 					Main.config.Save();
@@ -118,17 +123,25 @@ public class ImpHackEventManager implements Listenable {
 		}
 	}
 
-	@SubscribeEvent
-	public void onChatMessage(ClientChatEvent event) {
-		String message = event.getMessage();
-		if (message.startsWith(Client.getCommandPrefix())) {
-			String command = message.substring(message.indexOf(Client.getCommandPrefix()) + 1);
-			Client.addChatMessage("\247c" + message, false);
-			Main.cmdManager.callCommand(command);
-			event.setCanceled(true);
-			Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(message);
-		}
-	}
+	 @SubscribeEvent(priority = EventPriority.HIGHEST)
+	    public void onChatSent(final ClientChatEvent event) {
+	        if (event.getMessage().startsWith(Command.getCommandPrefix())) {
+	            event.setCanceled(true);
+	            try {
+	                Wrapper.mc.ingameGUI.getChatGUI().addToSentMessages(event.getMessage());
+	                if (event.getMessage().length() > 1) {
+	                    Main.cmdManager.executeCommand(event.getMessage().substring(Command.getCommandPrefix().length() - 1));
+	                }
+	                else {
+	                    Command.sendMessage("Please enter a command.");
+	                }
+	            }
+	            catch (Exception e) {
+	                e.printStackTrace();
+	                Command.sendMessage(ChatFormatting.RED + "An error occurred while running this command. Check the log!");
+	            }
+	        }
+	    }
 
 	@EventHandler
 	private final Listener<ImpHackEventPacket.ReceivePacket> PacketRecvEvent = new Listener<>(p_Event -> {

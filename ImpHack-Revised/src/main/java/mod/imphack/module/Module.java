@@ -2,6 +2,7 @@ package mod.imphack.module;
 
 import me.zero.alpine.listener.Listenable;
 import mod.imphack.Main;
+import mod.imphack.command.commands.Bind;
 import mod.imphack.container.ImpHackInventory;
 import mod.imphack.event.ImpHackEventBus;
 import mod.imphack.event.ImpHackEventConnection;
@@ -58,14 +59,14 @@ public class Module implements Listenable {
 		this.description = description;
 	}
 
-	public int getKey() {
-		return key;
-	}
-
-	public void setKey(int key) {
-		this.key = key;
-		Main.config.Save();
-	}
+	 public int getBind() {
+	        return key;
+	    }
+	    
+	    public void setBind(final int key) {
+	        this.key = key;
+	        Main.config.Save();
+	    }
 
 	public boolean isToggled() {
 		return toggled;

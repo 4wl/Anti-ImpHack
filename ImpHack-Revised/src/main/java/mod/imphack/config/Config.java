@@ -52,9 +52,9 @@ public class Config {
 
 		for (Module mod : Main.moduleManager.modules) {
 			if (mod.getName().equalsIgnoreCase("Esp2dHelper") || mod.getName().equalsIgnoreCase("ClickGUI")) {
-				save.add("module:" + mod.getName() + ":false:" + mod.getKey());
+				save.add("module:" + mod.getName() + ":false:" + mod.getBind());
 			} else {
-				save.add("module:" + mod.getName() + ":" + mod.isToggled() + ":" + mod.getKey());
+				save.add("module:" + mod.getName() + ":" + mod.isToggled() + ":" + mod.getBind());
 			}
 		}
 
@@ -141,7 +141,7 @@ public class Config {
 			if (s.toLowerCase().startsWith("module:")) {
 				Module m = Main.moduleManager.getModule(args[1]);
 				try {
-					m.setKey(Integer.parseInt(args[3]));
+					m.setBind(Integer.parseInt(args[3]));
 					m.setToggled(Boolean.parseBoolean(args[2]));
 				} catch (NullPointerException e) {
 					System.out.println("Module in config file does not exist");
@@ -241,7 +241,7 @@ public class Config {
 			if (s.toLowerCase().startsWith("module:")) {
 				Module m = Main.moduleManager.getModule(args[1]);
 				if (m != null) {
-					m.setKey(Integer.parseInt(args[3]));
+					m.setBind(Integer.parseInt(args[3]));
 					m.setToggled(Boolean.parseBoolean(args[2]));
 				}
 			} else if (s.toLowerCase().startsWith("setting:")) {

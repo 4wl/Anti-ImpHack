@@ -7,31 +7,25 @@ import mod.imphack.module.Module;
 
 public class Toggle extends Command {
 
-	@Override
-	public String getAlias() {
-		return "toggle";
+	public Toggle() {
+		super("toggle", new String[] {"<Module>"});
 	}
-
-	@Override
-	public String getDescription() {
-		return "toggles modules";
-	}
-
-	@Override
+	
+	
 	public String getSyntax() {
 		return ".toggle [Module]";
 	}
 
-	@Override
-	public void onCommand(String command, String[] args) {
+ @Override
+    public void execute(final String[] commands) {
 		for (Module m : Main.moduleManager.getModuleList()) {
-			if (args[0].equalsIgnoreCase(m.getName())) {
+			if (commands[0].equalsIgnoreCase(m.getName())) {
 				m.toggle();
-				Client.addChatMessage(args[0] + " has been toggled");
+				Client.addChatMessage(commands[0] + " has been toggled");
 				return;
 			}
 		}
-		Client.addChatMessage("Module " + args[0] + " was not found");
+		Client.addChatMessage("Module " + commands[0] + " was not found");
 		Client.addChatMessage(this.getSyntax());
 	}
 

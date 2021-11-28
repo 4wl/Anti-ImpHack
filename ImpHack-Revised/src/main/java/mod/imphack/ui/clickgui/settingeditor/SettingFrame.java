@@ -38,7 +38,7 @@ public class SettingFrame {
 		settingButtons = new ArrayList<>();
 		int offsetY = 14;
 
-		kbButton = new KeybindButton(module, module.getKey(), x, y + offsetY, this, this.kbColor);
+		kbButton = new KeybindButton(module, module.getBind(), x, y + offsetY, this, this.kbColor);
 		offsetY += 14;// keybind button space
 		if (Main.settingManager.getSettingsByMod(m) != null) {
 			for (Setting s : Main.settingManager.getSettingsByMod(m)) {

@@ -1,68 +1,44 @@
 package mod.imphack.command.commands;
 
-import mod.imphack.Client;
 import mod.imphack.Main;
 import mod.imphack.command.Command;
 import mod.imphack.module.Module;
 import org.lwjgl.input.Keyboard;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+
 public class Bind extends Command {
 
-	@Override
-	public String getAlias() {
-		return "bind";
+	 public Bind() {
+	        super("bind", new String[] { "<module>", "<bind>" });
+	    }
+	    
+	    @Override
+	    public void execute(final String[] commands) {
+	        if (commands.length == 1) {
+	            Command.sendMessage("Please specify a module.");
+	            return;
+	        }
+	        final String rkey = commands[1];
+	        final String moduleName = commands[0];
+	        final Module module = Main.moduleManager.getModule(moduleName);
+	        if (module == null) {
+	            Command.sendMessage("Unknown module '" + module + "'!");
+	            return;
+	        }
+	        if (rkey == null) {
+	            Command.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind());
+	            return;
+	        }
+	        int key = Keyboard.getKeyIndex(rkey.toUpperCase());
+	        if (rkey.equalsIgnoreCase("none")) {
+	            key = -1;
+	        }
+	        if (key == 0) {
+	            Command.sendMessage("Unknown key '" + rkey + "'!");
+	            return;
+	        }
+	        module.setBind(key);
+	        Command.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
+	    }
 	}
-
-	@Override
-	public String getDescription() {
-		return "Changes keybinds";
-	}
-
-	@Override
-	public String getSyntax() {
-		return ".bind set [Module] [Key] | .bind clear [Module] | .bind get [Module]";
-	}
-
-	@Override
-	public void onCommand(String command, String[] args) {
-		if (args[0].equalsIgnoreCase("set")) {
-			args[2] = args[2].toUpperCase();
-			int key = Keyboard.getKeyIndex(args[2]);
-
-			for (Module m : Main.moduleManager.getModuleList()) {
-				if (args[1].equalsIgnoreCase(m.getName())) {
-					m.setKey(Keyboard.getKeyIndex(Keyboard.getKeyName(key)));
-					Client.addChatMessage(args[1] + " has been bound to " + Keyboard.getKeyName(key));
-				}
-			}
-		}
-		if (args[0].equalsIgnoreCase("clear")) {
-			for (Module m : Main.moduleManager.getModuleList()) {
-				if (args[1].equalsIgnoreCase(m.getName())) {
-					m.setKey(Keyboard.CHAR_NONE);
-					Client.addChatMessage(args[1] + " keybind has been cleared");
-				}
-			}
-		}
-		if (args[0].equalsIgnoreCase("get")) {
-			for (Module m : Main.moduleManager.getModuleList()) {
-				if (m.getName().equalsIgnoreCase(args[1])) {
-					Client.addChatMessage(
-							m.getName() + " is bound to key: \"" + Keyboard.getKeyName(m.getKey()) + "\"");
-					return;
-				}
-			}
-			Client.addChatMessage("No such module exists");
-		}
-		if (args.length == 0) {
-			Client.addChatMessage("No arguments");
-			Client.addChatMessage(this.getSyntax());
-		}
-		if (!args[0].equalsIgnoreCase("set") && !args[0].equalsIgnoreCase("clear")
-				&& !args[0].equalsIgnoreCase("get")) {
-			Client.addChatMessage("Invalid arguments");
-			Client.addChatMessage(this.getSyntax());
-		}
-	}
-
-}

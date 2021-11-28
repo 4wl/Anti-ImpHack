@@ -10,14 +10,18 @@ import net.minecraft.util.text.TextComponentString;
 
 public class Client {
 
-	public static final String commandPrefix = ".";
+	
+    private static String prefix = ".";
 
-	public static String getCommandPrefix() {
-		return commandPrefix;
-	}
+
+	
+	
+	
 
 	public Client() {
 		new CommandManager();
+		
+
 	}
 
 	public static void addChatMessage(String s, boolean doPrefixture) {
@@ -48,4 +52,12 @@ public class Client {
 		keybindModule = null;
 		ClickGuiController.INSTANCE.settingController.refresh(false);
 	}
+	
+	 public static String getPrefix() {
+	        return prefix;
+	    }
+	    
+	  public static void setPrefix(final String prefix) {
+	        Client.prefix = prefix;
+	    }
 }

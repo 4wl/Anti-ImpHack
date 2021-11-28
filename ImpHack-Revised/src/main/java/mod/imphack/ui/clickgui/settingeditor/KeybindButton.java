@@ -36,7 +36,7 @@ public class KeybindButton {
 	}
 
 	public void draw(int mouseX, int mouseY) {
-		mc.fontRenderer.drawString("Keybind: " + Keyboard.getKeyName(module.getKey()), x + 2, y + 2, color.getRGB());
+		mc.fontRenderer.drawString("Keybind: " + Keyboard.getKeyName(module.getBind()), x + 2, y + 2, color.getRGB());
 
 		
 	}
