@@ -22,7 +22,7 @@ public class ImpHackDiscordRichPresence {
 			discordRichPresence.details = Reference.NAME + " " + Reference.RELEASE_VERSION;
 			discordRichPresence.largeImageKey = "2b2t_-_spawnbase_2b2t-891";
 			discordRichPresence.largeImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
-			discordRichPresence.smallImageKey = "skyrim";
+			discordRichPresence.smallImageKey = "skyri";
 			discordRichPresence.smallImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
 			discordRichPresence.state = null;
 		} else if (mode.equalsIgnoreCase("Vanilla")) {
